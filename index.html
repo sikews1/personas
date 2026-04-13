@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestor de Personas</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+  h1 { margin-top: 0; }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  input:focus { outline: 2px solid #0071e3; border-color: transparent; }
+  .actions { margin-top: 16px; display: flex; gap: 8px; }
+  button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .btn-primary { background: #0071e3; color: white; }
+  .btn-primary:hover { background: #0077ed; }
+  .btn-secondary { background: #e8e8ed; color: #1d1d1f; }
+  .btn-danger { background: #ff3b30; color: white; }
+  .btn-edit { background: #ffcc00; color: #1d1d1f; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e5e5ea; font-size: 14px; }
+  th { background: #fafafa; font-weight: 600; }
+  td button { padding: 6px 12px; font-size: 12px; margin-right: 4px; }
+  .empty { text-align: center; color: #888; padding: 30px; }
+  .error { color: #ff3b30; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>Gestor de Personas</h1>
+
+<div class="card">
+  <h2 id="form-title">Añadir persona</h2>
+  <form id="persona-form">
+    <div class="form-grid">
+      <div>
+        <label>Nombre</label>
+        <input type="text" id="nombre" required>
+      </div>
+      <div>
+        <label>Apellido</label>
+        <input type="text" id="apellido" required>
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input type="tel" id="telefono" required>
+      </div>
+    </div>
+    <div id="error" class="error"></div>
+    <div class="actions">
+      <button type="submit" class="btn-primary" id="submit-btn">Añadir</button>
+      <button type="button" class="btn-secondary" id="cancel-btn" style="display:none">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Listado (<span id="count">0</span>)</h2>
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div id="empty" class="empty">No hay personas registradas todavía.</div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'personas_db';
+  let personas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let editIndex = null;
+
+  const form = document.getElementById('persona-form');
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty');
+  const count = document.getElementById('count');
+  const formTitle = document.getElementById('form-title');
+  const submitBtn = document.getElementById('submit-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+  const errorDiv = document.getElementById('error');
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(personas));
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function render() {
+    tbody.innerHTML = '';
+    count.textContent = personas.length;
+    if (personas.length === 0) {
+      empty.style.display = 'block';
+      document.getElementById('tabla').style.display = 'none';
+      return;
+    }
+    empty.style.display = 'none';
+    document.getElementById('tabla').style.display = 'table';
+    personas.forEach((p, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(p.nombre)}</td>
+        <td>${escapeHtml(p.apellido)}</td>
+        <td>${escapeHtml(p.email)}</td>
+        <td>${escapeHtml(p.telefono)}</td>
+        <td>
+          <button class="btn-edit" onclick="editar(${i})">Editar</button>
+          <button class="btn-danger" onclick="eliminar(${i})">Eliminar</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    errorDiv.textContent = '';
+    const data = {
+      nombre: document.getElementById('nombre').value.trim(),
+      apellido: document.getElementById('apellido').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      telefono: document.getElementById('telefono').value.trim(),
+    };
+    if (!data.nombre || !data.apellido || !data.email || !data.telefono) {
+      errorDiv.textContent = 'Rellena todos los campos.';
+      return;
+    }
+    if (editIndex !== null) {
+      personas[editIndex] = data;
+      editIndex = null;
+    } else {
+      personas.push(data);
+    }
+    save();
+    render();
+    resetForm();
+  });
+
+  function resetForm() {
+    form.reset();
+    editIndex = null;
+    formTitle.textContent = 'Añadir persona';
+    submitBtn.textContent = 'Añadir';
+    cancelBtn.style.display = 'none';
+    errorDiv.textContent = '';
+  }
+
+  window.editar = function(i) {
+    const p = personas[i];
+    document.getElementById('nombre').value = p.nombre;
+    document.getElementById('apellido').value = p.apellido;
+    document.getElementById('email').value = p.email;
+    document.getElementById('telefono').value = p.telefono;
+    editIndex = i;
+    formTitle.textContent = 'Editar persona';
+    submitBtn.textContent = 'Guardar cambios';
+    cancelBtn.style.display = 'inline-block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.eliminar = function(i) {
+    if (confirm('¿Eliminar a ' + personas[i].nombre + ' ' + personas[i].apellido + '?')) {
+      personas.splice(i, 1);
+      save();
+      render();
+      if (editIndex === i) resetForm();
+    }
+  };
+
+  cancelBtn.addEventListener('click', resetForm);
+
+  render();
+</script>
+</body>
+</html>
