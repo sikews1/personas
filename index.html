@@ -8,34 +8,34 @@
   * { box-sizing: border-box; }
   body {
     font-family: system-ui, -apple-system, sans-serif;
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 20px;
     background: #f5f5f7;
     color: #1d1d1f;
   }
   h1 { margin-top: 0; }
-  .tabs {
+  nav {
     display: flex;
     gap: 4px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     border-bottom: 2px solid #e5e5ea;
     flex-wrap: wrap;
   }
-  .tab {
-    padding: 12px 18px;
+  .nav-btn {
+    padding: 12px 20px;
     background: none;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     color: #555;
     border-bottom: 3px solid transparent;
     margin-bottom: -2px;
     font-weight: 500;
   }
-  .tab.active { color: #0071e3; border-bottom-color: #0071e3; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+  .nav-btn.active { color: #0071e3; border-bottom-color: #0071e3; }
+  .page { display: none; }
+  .page.active { display: block; }
   .card {
     background: white;
     border-radius: 12px;
@@ -74,6 +74,60 @@
   .empty { text-align: center; color: #888; padding: 30px; }
   .error { color: #ff3b30; font-size: 13px; margin-top: 8px; }
 
+  /* Inici */
+  .hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #0071e3 0%, #00b4d8 100%);
+    border-radius: 16px;
+    color: white;
+    margin-bottom: 24px;
+  }
+  .hero h2 { font-size: 28px; margin: 0 0 8px; }
+  .hero p { font-size: 16px; opacity: 0.9; margin: 0; }
+
+  /* Cursos grid */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .course-card {
+    background: white;
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+  }
+  .course-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .course-icon { font-size: 40px; margin-bottom: 12px; }
+  .course-card h3 { margin: 0 0 6px; font-size: 16px; }
+  .course-card p { margin: 0; font-size: 13px; color: #666; }
+  .course-card.c1 { border-color: #0071e3; }
+  .course-card.c2 { border-color: #ff9500; }
+  .course-card.c3 { border-color: #af52de; }
+  .course-card.c4 { border-color: #34c759; }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    background: none;
+    border: none;
+    color: #0071e3;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0;
+  }
+  .back-btn:hover { text-decoration: underline; }
+
+  /* Math */
   .math-box {
     font-size: 28px;
     text-align: center;
@@ -107,16 +161,44 @@
 
 <h1>Aplicació</h1>
 
-<div class="tabs">
-  <button class="tab active" data-tab="personas">Persones</button>
-  <button class="tab" data-tab="eq1">Eq. 1r grau</button>
-  <button class="tab" data-tab="eq2">Eq. 2n grau</button>
-  <button class="tab" data-tab="sist">Sistemes</button>
-  <button class="tab" data-tab="problemes">Problemes</button>
+<nav>
+  <button class="nav-btn active" data-page="inici">Inici</button>
+  <button class="nav-btn" data-page="personas">Persones</button>
+  <button class="nav-btn" data-page="cursos">Cursos</button>
+</nav>
+
+<!-- ========= INICI ========= -->
+<div class="page active" id="page-inici">
+  <div class="hero">
+    <h2>Benvingut!</h2>
+    <p>Gestiona persones i estudia matemàtiques des d'un sol lloc.</p>
+  </div>
+  <div class="courses-grid">
+    <div class="course-card c1" onclick="goToCourse('eq1')">
+      <div class="course-icon">📐</div>
+      <h3>Eq. de 1r grau</h3>
+      <p>Teoria, exemples i pràctica</p>
+    </div>
+    <div class="course-card c2" onclick="goToCourse('eq2')">
+      <div class="course-icon">📈</div>
+      <h3>Eq. de 2n grau</h3>
+      <p>Fórmula general i exercicis</p>
+    </div>
+    <div class="course-card c3" onclick="goToCourse('sist')">
+      <div class="course-icon">🔗</div>
+      <h3>Sistemes d'equacions</h3>
+      <p>Dues incògnites, tres mètodes</p>
+    </div>
+    <div class="course-card c4" onclick="goToCourse('prob')">
+      <div class="course-icon">🧩</div>
+      <h3>Problemes d'enunciat</h3>
+      <p>Tradueix enunciats a equacions</p>
+    </div>
+  </div>
 </div>
 
 <!-- ========= PERSONES ========= -->
-<div class="tab-content active" id="tab-personas">
+<div class="page" id="page-personas">
   <div class="card">
     <h2 id="form-title">Afegir persona</h2>
     <form id="persona-form">
@@ -143,13 +225,40 @@
   </div>
 </div>
 
-<!-- ========= EQUACIONS 1r GRAU ========= -->
-<div class="tab-content" id="tab-eq1">
+<!-- ========= CURSOS (llista) ========= -->
+<div class="page" id="page-cursos">
+  <div class="courses-grid" id="cursos-list">
+    <div class="course-card c1" onclick="goToCourse('eq1')">
+      <div class="course-icon">📐</div>
+      <h3>Eq. de 1r grau</h3>
+      <p>Teoria, exemples i pràctica</p>
+    </div>
+    <div class="course-card c2" onclick="goToCourse('eq2')">
+      <div class="course-icon">📈</div>
+      <h3>Eq. de 2n grau</h3>
+      <p>Fórmula general i exercicis</p>
+    </div>
+    <div class="course-card c3" onclick="goToCourse('sist')">
+      <div class="course-icon">🔗</div>
+      <h3>Sistemes d'equacions</h3>
+      <p>Dues incògnites, tres mètodes</p>
+    </div>
+    <div class="course-card c4" onclick="goToCourse('prob')">
+      <div class="course-icon">🧩</div>
+      <h3>Problemes d'enunciat</h3>
+      <p>Tradueix enunciats a equacions</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========= CURS: EQ 1r GRAU ========= -->
+<div class="page" id="page-eq1">
+  <button class="back-btn" onclick="goBack()">&#8592; Tornar als cursos</button>
   <div class="card">
     <h2>Què és una equació de primer grau?</h2>
-    <p>Una <strong>equació de primer grau</strong> amb una incògnita és una igualtat on la variable (normalment <em>x</em>) apareix elevada a l'exponent 1. Forma general:</p>
+    <p>Una <strong>equació de primer grau</strong> amb una incògnita és una igualtat on la variable (<em>x</em>) apareix elevada a l'exponent 1. Forma general:</p>
     <div class="math-box">a·x + b = 0</div>
-    <p>on <em>a ≠ 0</em>. <strong>Resoldre</strong> l'equació vol dir trobar el valor de <em>x</em> que fa certa la igualtat.</p>
+    <p>amb <em>a ≠ 0</em>. <strong>Resoldre</strong> l'equació vol dir trobar el valor de <em>x</em> que fa certa la igualtat.</p>
   </div>
   <div class="card">
     <h2>Passos per resoldre-la</h2>
@@ -170,7 +279,7 @@
   </div>
   <div class="card">
     <h2>Practica!</h2>
-    <p>Resol l'equació i escriu el valor de <em>x</em> (accepta decimals i fraccions com <code>3/2</code>):</p>
+    <p>Resol l'equació (accepta decimals i fraccions com <code>3/2</code>):</p>
     <div class="math-box" id="eq1-display">—</div>
     <div class="answer-row">
       <label>x =</label>
@@ -184,35 +293,36 @@
   </div>
 </div>
 
-<!-- ========= EQUACIONS 2n GRAU ========= -->
-<div class="tab-content" id="tab-eq2">
+<!-- ========= CURS: EQ 2n GRAU ========= -->
+<div class="page" id="page-eq2">
+  <button class="back-btn" onclick="goBack()">&#8592; Tornar als cursos</button>
   <div class="card">
     <h2>Què és una equació de segon grau?</h2>
     <p>És una equació de la forma:</p>
     <div class="math-box">a·x² + b·x + c = 0</div>
-    <p>amb <em>a ≠ 0</em>. Pot tenir <strong>dues solucions</strong>, una de sola (doble) o cap solució real.</p>
+    <p>amb <em>a ≠ 0</em>. Pot tenir dues solucions, una de doble, o cap solució real.</p>
   </div>
   <div class="card">
     <h2>Fórmula general</h2>
     <div class="math-box">x = ( −b ± √(b² − 4ac) ) / (2a)</div>
-    <p>L'expressió <strong>Δ = b² − 4ac</strong> es diu <em>discriminant</em>:</p>
+    <p><strong>Δ = b² − 4ac</strong> (discriminant):</p>
     <ul>
-      <li>Si <strong>Δ &gt; 0</strong>: dues solucions reals diferents.</li>
-      <li>Si <strong>Δ = 0</strong>: una solució doble.</li>
-      <li>Si <strong>Δ &lt; 0</strong>: cap solució real.</li>
+      <li><strong>Δ &gt; 0</strong> → dues solucions reals.</li>
+      <li><strong>Δ = 0</strong> → solució doble.</li>
+      <li><strong>Δ &lt; 0</strong> → cap solució real.</li>
     </ul>
   </div>
   <div class="card">
     <h2>Exemple resolt</h2>
     <p>Resolem: <strong>x² − 5x + 6 = 0</strong></p>
     <div class="step">a = 1, b = −5, c = 6</div>
-    <div class="step">Δ = (−5)² − 4·1·6 = 25 − 24 = 1</div>
-    <div class="step">x = (5 ± √1) / 2 = (5 ± 1) / 2</div>
+    <div class="step">Δ = 25 − 24 = 1</div>
+    <div class="step">x = (5 ± 1) / 2</div>
     <div class="step">x₁ = 3, x₂ = 2</div>
   </div>
   <div class="card">
     <h2>Practica!</h2>
-    <p>Resol l'equació i introdueix les <strong>dues solucions</strong> (l'ordre és igual):</p>
+    <p>Introdueix les <strong>dues solucions</strong> (l'ordre no importa):</p>
     <div class="math-box" id="eq2-display">—</div>
     <div class="answer-row">
       <label>x₁ =</label><input type="text" id="eq2-x1">
@@ -221,42 +331,37 @@
       <button class="btn-secondary" id="eq2-new">Nova</button>
       <button class="btn-secondary" id="eq2-show">Solució</button>
     </div>
-    <p style="font-size:13px;color:#888;margin-top:8px">Si la solució és doble, escriu el mateix valor als dos camps.</p>
+    <p style="font-size:13px;color:#888;margin-top:8px">Si és doble, escriu el mateix valor als dos camps.</p>
     <div id="eq2-feedback"></div>
     <div class="stats"><span>Encerts: <strong id="eq2-ok">0</strong></span><span>Errors: <strong id="eq2-ko">0</strong></span></div>
   </div>
 </div>
 
-<!-- ========= SISTEMES ========= -->
-<div class="tab-content" id="tab-sist">
+<!-- ========= CURS: SISTEMES ========= -->
+<div class="page" id="page-sist">
+  <button class="back-btn" onclick="goBack()">&#8592; Tornar als cursos</button>
   <div class="card">
     <h2>Què és un sistema d'equacions?</h2>
-    <p>Un <strong>sistema de dues equacions amb dues incògnites</strong> són dues equacions de primer grau que han de ser certes alhora:</p>
-    <div class="math-box">
-      a₁x + b₁y = c₁<br>
-      a₂x + b₂y = c₂
-    </div>
-    <p>Resoldre'l vol dir trobar els valors de <em>x</em> i <em>y</em> que compleixen les dues equacions.</p>
+    <p>Dues equacions de primer grau que han de ser certes alhora:</p>
+    <div class="math-box">a₁x + b₁y = c₁<br>a₂x + b₂y = c₂</div>
+    <p>Cal trobar <em>x</em> i <em>y</em> que compleixen les dues equacions.</p>
   </div>
   <div class="card">
     <h2>Mètodes de resolució</h2>
     <ul>
-      <li><strong>Substitució:</strong> aïllar una variable en una equació i substituir-la a l'altra.</li>
-      <li><strong>Igualació:</strong> aïllar la mateixa variable a les dues equacions i igualar.</li>
+      <li><strong>Substitució:</strong> aïllar una variable i substituir-la a l'altra equació.</li>
+      <li><strong>Igualació:</strong> aïllar la mateixa variable a les dues i igualar.</li>
       <li><strong>Reducció:</strong> sumar o restar les equacions per eliminar una variable.</li>
     </ul>
   </div>
   <div class="card">
     <h2>Exemple resolt (reducció)</h2>
-    <p>Resolem:</p>
     <div class="math-box">x + y = 7<br>x − y = 3</div>
     <div class="step">Sumem: 2x = 10 → x = 5</div>
-    <div class="step">Substituïm a la primera: 5 + y = 7 → y = 2</div>
-    <div class="step">Solució: x = 5, y = 2</div>
+    <div class="step">Substituïm: 5 + y = 7 → y = 2</div>
   </div>
   <div class="card">
     <h2>Practica!</h2>
-    <p>Resol el sistema:</p>
     <div class="math-box" id="sist-display">—</div>
     <div class="answer-row">
       <label>x =</label><input type="text" id="sist-x">
@@ -270,26 +375,25 @@
   </div>
 </div>
 
-<!-- ========= PROBLEMES ========= -->
-<div class="tab-content" id="tab-problemes">
+<!-- ========= CURS: PROBLEMES ========= -->
+<div class="page" id="page-prob">
+  <button class="back-btn" onclick="goBack()">&#8592; Tornar als cursos</button>
   <div class="card">
     <h2>Problemes d'enunciat</h2>
-    <p>Els problemes d'enunciat es resolen traduint el text a una equació. Segueix aquests passos:</p>
+    <p>Tradueix l'enunciat a una equació seguint aquests passos:</p>
     <ol>
       <li>Llegeix l'enunciat amb atenció.</li>
-      <li>Assigna una variable (<em>x</em>) a la incògnita.</li>
+      <li>Assigna <em>x</em> a la incògnita.</li>
       <li>Expressa la resta de dades en funció de <em>x</em>.</li>
-      <li>Planteja l'equació a partir de la condició del problema.</li>
-      <li>Resol l'equació.</li>
-      <li>Comprova que la solució té sentit.</li>
+      <li>Planteja l'equació.</li>
+      <li>Resol i comprova.</li>
     </ol>
   </div>
   <div class="card">
     <h2>Exemple</h2>
     <p><em>"La suma de dos nombres consecutius és 27. Quins són?"</em></p>
-    <div class="step">Sigui x el primer nombre. L'altre és x + 1.</div>
     <div class="step">x + (x + 1) = 27</div>
-    <div class="step">2x + 1 = 27 → 2x = 26 → x = 13</div>
+    <div class="step">2x = 26 → x = 13</div>
     <div class="step">Els nombres són 13 i 14.</div>
   </div>
   <div class="card">
@@ -299,7 +403,7 @@
       <label>Resposta:</label>
       <input type="text" id="prob-answer" placeholder="valor numèric">
       <button class="btn-primary" id="prob-check">Comprovar</button>
-      <button class="btn-secondary" id="prob-new">Nou problema</button>
+      <button class="btn-secondary" id="prob-new">Nou</button>
       <button class="btn-secondary" id="prob-show">Solució</button>
     </div>
     <p style="font-size:13px;color:#888;margin-top:8px" id="prob-hint"></p>
@@ -309,14 +413,26 @@
 </div>
 
 <script>
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById('tab-' + t.dataset.tab).classList.add('active');
-  });
+/* ========== NAVEGACIÓ ========== */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const navBtn = document.querySelector('.nav-btn[data-page="' + id + '"]');
+  if (navBtn) navBtn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-btn').forEach(b => {
+  b.addEventListener('click', () => showPage(b.dataset.page));
 });
+window.goToCourse = function(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelector('.nav-btn[data-page="cursos"]').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+window.goBack = function() { showPage('cursos'); };
 
 /* ========== PERSONES ========== */
 const STORAGE_KEY = 'personas_db';
@@ -331,125 +447,71 @@ const submitBtn = document.getElementById('submit-btn');
 const cancelBtn = document.getElementById('cancel-btn');
 const errorDiv = document.getElementById('error');
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(personas)); }
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function render() {
   tbody.innerHTML = '';
   count.textContent = personas.length;
-  if (personas.length === 0) {
-    empty.style.display = 'block';
-    document.getElementById('tabla').style.display = 'none';
-    return;
-  }
+  if (personas.length === 0) { empty.style.display = 'block'; document.getElementById('tabla').style.display = 'none'; return; }
   empty.style.display = 'none';
   document.getElementById('tabla').style.display = 'table';
   personas.forEach((p, i) => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${escapeHtml(p.nombre)}</td><td>${escapeHtml(p.apellido)}</td><td>${escapeHtml(p.email)}</td><td>${escapeHtml(p.telefono)}</td><td><button class="btn-edit" onclick="editar(${i})">Editar</button><button class="btn-danger" onclick="eliminar(${i})">Eliminar</button></td>`;
+    tr.innerHTML = '<td>'+escapeHtml(p.nombre)+'</td><td>'+escapeHtml(p.apellido)+'</td><td>'+escapeHtml(p.email)+'</td><td>'+escapeHtml(p.telefono)+'</td><td><button class="btn-edit" onclick="editar('+i+')">Editar</button><button class="btn-danger" onclick="eliminar('+i+')">Eliminar</button></td>';
     tbody.appendChild(tr);
   });
 }
 form.addEventListener('submit', e => {
-  e.preventDefault();
-  errorDiv.textContent = '';
-  const data = {
-    nombre: document.getElementById('nombre').value.trim(),
-    apellido: document.getElementById('apellido').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    telefono: document.getElementById('telefono').value.trim(),
-  };
-  if (!data.nombre || !data.apellido || !data.email || !data.telefono) {
-    errorDiv.textContent = 'Omple tots els camps.';
-    return;
-  }
-  if (editIndex !== null) { personas[editIndex] = data; editIndex = null; }
-  else { personas.push(data); }
+  e.preventDefault(); errorDiv.textContent = '';
+  const data = { nombre: document.getElementById('nombre').value.trim(), apellido: document.getElementById('apellido').value.trim(), email: document.getElementById('email').value.trim(), telefono: document.getElementById('telefono').value.trim() };
+  if (!data.nombre || !data.apellido || !data.email || !data.telefono) { errorDiv.textContent = 'Omple tots els camps.'; return; }
+  if (editIndex !== null) { personas[editIndex] = data; editIndex = null; } else { personas.push(data); }
   save(); render(); resetForm();
 });
-function resetForm() {
-  form.reset();
-  editIndex = null;
-  formTitle.textContent = 'Afegir persona';
-  submitBtn.textContent = 'Afegir';
-  cancelBtn.style.display = 'none';
-  errorDiv.textContent = '';
-}
+function resetForm() { form.reset(); editIndex = null; formTitle.textContent = 'Afegir persona'; submitBtn.textContent = 'Afegir'; cancelBtn.style.display = 'none'; errorDiv.textContent = ''; }
 window.editar = function(i) {
   const p = personas[i];
-  document.getElementById('nombre').value = p.nombre;
-  document.getElementById('apellido').value = p.apellido;
-  document.getElementById('email').value = p.email;
-  document.getElementById('telefono').value = p.telefono;
-  editIndex = i;
-  formTitle.textContent = 'Editar persona';
-  submitBtn.textContent = 'Desar canvis';
-  cancelBtn.style.display = 'inline-block';
+  document.getElementById('nombre').value = p.nombre; document.getElementById('apellido').value = p.apellido;
+  document.getElementById('email').value = p.email; document.getElementById('telefono').value = p.telefono;
+  editIndex = i; formTitle.textContent = 'Editar persona'; submitBtn.textContent = 'Desar canvis'; cancelBtn.style.display = 'inline-block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
-window.eliminar = function(i) {
-  if (confirm('Eliminar ' + personas[i].nombre + ' ' + personas[i].apellido + '?')) {
-    personas.splice(i, 1);
-    save(); render();
-    if (editIndex === i) resetForm();
-  }
-};
+window.eliminar = function(i) { if (confirm('Eliminar ' + personas[i].nombre + ' ' + personas[i].apellido + '?')) { personas.splice(i, 1); save(); render(); if (editIndex === i) resetForm(); } };
 cancelBtn.addEventListener('click', resetForm);
 render();
 
 /* ========== UTILS ========== */
-function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-function nz(min, max) { let n; do { n = randInt(min, max); } while (n === 0); return n; }
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function nz(a, b) { let n; do { n = randInt(a, b); } while (n === 0); return n; }
 function parseNum(s) {
   s = (s || '').trim().replace(',', '.');
   if (s === '') return NaN;
-  if (s.includes('/')) {
-    const [n, d] = s.split('/').map(Number);
-    if (!isNaN(n) && !isNaN(d) && d !== 0) return n / d;
-    return NaN;
-  }
+  if (s.includes('/')) { const [n, d] = s.split('/').map(Number); return (!isNaN(n) && !isNaN(d) && d !== 0) ? n / d : NaN; }
   return Number(s);
 }
-function eq(a, b) { return Math.abs(a - b) < 1e-6; }
-function fb(id, cls, html) {
-  const el = document.getElementById(id);
-  el.className = 'feedback ' + cls;
-  el.innerHTML = html;
-}
+function approx(a, b) { return Math.abs(a - b) < 1e-6; }
+function setFb(id, cls, html) { const el = document.getElementById(id); el.className = 'feedback ' + cls; el.innerHTML = html; }
 
 /* ========== EQ 1r GRAU ========== */
 let eq1 = null, eq1ok = 0, eq1ko = 0;
 function genEq1() {
-  const x = randInt(-10, 10);
-  const a = nz(-6, 6);
-  let c = randInt(-6, 6);
-  while (c === a) c = randInt(-6, 6);
-  const b = randInt(-10, 10);
-  const d = (a - c) * x + b;
+  const x = randInt(-10, 10), a = nz(-6, 6);
+  let c = randInt(-6, 6); while (c === a) c = randInt(-6, 6);
+  const b = randInt(-10, 10), d = (a - c) * x + b;
   const fmt = k => k === 1 ? 'x' : k === -1 ? '-x' : k + 'x';
-  const sign = n => n >= 0 ? ' + ' + n : ' - ' + Math.abs(n);
-  return { text: fmt(a) + sign(b) + ' = ' + fmt(c) + sign(d), sol: x, a, b, c, d };
+  const sgn = n => n >= 0 ? ' + ' + n : ' - ' + Math.abs(n);
+  return { text: fmt(a) + sgn(b) + ' = ' + fmt(c) + sgn(d), sol: x, a, b, c, d };
 }
-function showEq1() {
-  eq1 = genEq1();
-  document.getElementById('eq1-display').textContent = eq1.text;
-  document.getElementById('eq1-answer').value = '';
-  document.getElementById('eq1-feedback').innerHTML = '';
-}
+function showEq1() { eq1 = genEq1(); document.getElementById('eq1-display').textContent = eq1.text; document.getElementById('eq1-answer').value = ''; document.getElementById('eq1-feedback').innerHTML = ''; }
 document.getElementById('eq1-check').addEventListener('click', () => {
   const r = parseNum(document.getElementById('eq1-answer').value);
-  if (isNaN(r)) return fb('eq1-feedback', 'ko', 'Escriu un nombre vàlid.');
-  if (eq(r, eq1.sol)) { eq1ok++; document.getElementById('eq1-ok').textContent = eq1ok; fb('eq1-feedback', 'ok', '✓ Correcte! x = ' + eq1.sol); }
-  else { eq1ko++; document.getElementById('eq1-ko').textContent = eq1ko; fb('eq1-feedback', 'ko', '✗ Incorrecte. Torna-ho a provar.'); }
+  if (isNaN(r)) return setFb('eq1-feedback', 'ko', 'Escriu un nombre vàlid.');
+  if (approx(r, eq1.sol)) { eq1ok++; document.getElementById('eq1-ok').textContent = eq1ok; setFb('eq1-feedback', 'ok', '✓ Correcte! x = ' + eq1.sol); }
+  else { eq1ko++; document.getElementById('eq1-ko').textContent = eq1ko; setFb('eq1-feedback', 'ko', '✗ Incorrecte.'); }
 });
 document.getElementById('eq1-new').addEventListener('click', showEq1);
 document.getElementById('eq1-show').addEventListener('click', () => {
   const { a, b, c, d, sol } = eq1;
-  fb('eq1-feedback', 'info',
-    '<strong>Solució pas a pas:</strong>' +
-    '<div class="step">1) ' + (a - c) + 'x = ' + (d - b) + '</div>' +
-    '<div class="step">2) x = ' + (d - b) + ' / ' + (a - c) + '</div>' +
-    '<div class="step">3) x = ' + sol + '</div>');
+  setFb('eq1-feedback', 'info', '<strong>Solució:</strong><div class="step">' + (a-c) + 'x = ' + (d-b) + '</div><div class="step">x = ' + (d-b) + ' / ' + (a-c) + ' = ' + sol + '</div>');
 });
 document.getElementById('eq1-answer').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('eq1-check').click(); });
 showEq1();
@@ -457,215 +519,76 @@ showEq1();
 /* ========== EQ 2n GRAU ========== */
 let eq2 = null, eq2ok = 0, eq2ko = 0;
 function genEq2() {
-  // Generar amb arrels enteres: (x - r1)(x - r2) = 0 -> x² - (r1+r2)x + r1·r2 = 0
-  const r1 = randInt(-6, 6);
-  const r2 = randInt(-6, 6);
-  const a = 1;
-  const b = -(r1 + r2);
-  const c = r1 * r2;
-  const sign = n => n >= 0 ? ' + ' + n : ' - ' + Math.abs(n);
+  const r1 = randInt(-6, 6), r2 = randInt(-6, 6);
+  const b = -(r1 + r2), c = r1 * r2;
+  const sgn = n => n >= 0 ? ' + ' + n : ' - ' + Math.abs(n);
   let text = 'x²';
-  if (b !== 0) text += sign(b) + 'x';
-  if (c !== 0) text += sign(c);
-  text += ' = 0';
-  return { text, a, b, c, r1, r2 };
+  if (b !== 0) text += (b > 0 ? ' + ' : ' - ') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'x';
+  if (c !== 0) text += sgn(c);
+  return { text: text + ' = 0', r1, r2, a: 1, b, c };
 }
-function showEq2() {
-  eq2 = genEq2();
-  document.getElementById('eq2-display').textContent = eq2.text;
-  document.getElementById('eq2-x1').value = '';
-  document.getElementById('eq2-x2').value = '';
-  document.getElementById('eq2-feedback').innerHTML = '';
-}
+function showEq2() { eq2 = genEq2(); document.getElementById('eq2-display').textContent = eq2.text; document.getElementById('eq2-x1').value = ''; document.getElementById('eq2-x2').value = ''; document.getElementById('eq2-feedback').innerHTML = ''; }
 document.getElementById('eq2-check').addEventListener('click', () => {
-  const x1 = parseNum(document.getElementById('eq2-x1').value);
-  const x2 = parseNum(document.getElementById('eq2-x2').value);
-  if (isNaN(x1) || isNaN(x2)) return fb('eq2-feedback', 'ko', 'Introdueix els dos valors.');
-  const ok = (eq(x1, eq2.r1) && eq(x2, eq2.r2)) || (eq(x1, eq2.r2) && eq(x2, eq2.r1));
-  if (ok) { eq2ok++; document.getElementById('eq2-ok').textContent = eq2ok; fb('eq2-feedback', 'ok', '✓ Correcte! x₁ = ' + eq2.r1 + ', x₂ = ' + eq2.r2); }
-  else { eq2ko++; document.getElementById('eq2-ko').textContent = eq2ko; fb('eq2-feedback', 'ko', '✗ Incorrecte.'); }
+  const x1 = parseNum(document.getElementById('eq2-x1').value), x2 = parseNum(document.getElementById('eq2-x2').value);
+  if (isNaN(x1) || isNaN(x2)) return setFb('eq2-feedback', 'ko', 'Introdueix els dos valors.');
+  if ((approx(x1, eq2.r1) && approx(x2, eq2.r2)) || (approx(x1, eq2.r2) && approx(x2, eq2.r1))) { eq2ok++; document.getElementById('eq2-ok').textContent = eq2ok; setFb('eq2-feedback', 'ok', '✓ Correcte! x₁ = ' + eq2.r1 + ', x₂ = ' + eq2.r2); }
+  else { eq2ko++; document.getElementById('eq2-ko').textContent = eq2ko; setFb('eq2-feedback', 'ko', '✗ Incorrecte.'); }
 });
 document.getElementById('eq2-new').addEventListener('click', showEq2);
 document.getElementById('eq2-show').addEventListener('click', () => {
-  const { a, b, c, r1, r2 } = eq2;
-  const disc = b * b - 4 * a * c;
-  fb('eq2-feedback', 'info',
-    '<strong>Solució pas a pas:</strong>' +
-    '<div class="step">a = ' + a + ', b = ' + b + ', c = ' + c + '</div>' +
-    '<div class="step">Δ = b² − 4ac = ' + (b * b) + ' − ' + (4 * a * c) + ' = ' + disc + '</div>' +
-    '<div class="step">x = (' + (-b) + ' ± √' + disc + ') / ' + (2 * a) + '</div>' +
-    '<div class="step">x₁ = ' + r1 + ', x₂ = ' + r2 + '</div>');
+  const { a, b, c, r1, r2 } = eq2; const disc = b*b - 4*a*c;
+  setFb('eq2-feedback', 'info', '<strong>Solució:</strong><div class="step">a='+a+', b='+b+', c='+c+'</div><div class="step">Δ = '+b*b+' − '+(4*a*c)+' = '+disc+'</div><div class="step">x = ('+(-b)+' ± √'+disc+') / '+2*a+'</div><div class="step">x₁ = '+r1+', x₂ = '+r2+'</div>');
 });
 showEq2();
 
 /* ========== SISTEMES ========== */
 let sist = null, sistok = 0, sistko = 0;
 function genSist() {
-  const x = randInt(-8, 8);
-  const y = randInt(-8, 8);
-  let a1 = nz(-5, 5), b1 = nz(-5, 5);
-  let a2 = nz(-5, 5), b2 = nz(-5, 5);
-  while (a1 * b2 - a2 * b1 === 0) { a2 = nz(-5, 5); b2 = nz(-5, 5); }
-  const c1 = a1 * x + b1 * y;
-  const c2 = a2 * x + b2 * y;
-  const fmt = (k, v) => {
-    const s = Math.abs(k) === 1 ? v : Math.abs(k) + v;
-    return (k < 0 ? '− ' : '') + s;
+  const x = randInt(-8, 8), y = randInt(-8, 8);
+  let a1 = nz(-5, 5), b1 = nz(-5, 5), a2 = nz(-5, 5), b2 = nz(-5, 5);
+  while (a1*b2 - a2*b1 === 0) { a2 = nz(-5, 5); b2 = nz(-5, 5); }
+  const c1 = a1*x + b1*y, c2 = a2*x + b2*y;
+  const line = (a, b, c) => {
+    let s = (a < 0 ? '−' : '') + (Math.abs(a) === 1 ? 'x' : Math.abs(a) + 'x');
+    s += (b >= 0 ? ' + ' : ' − ') + (Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y');
+    return s + ' = ' + c;
   };
-  const join = (k1, v1, k2, v2, c) => {
-    let left = (k1 < 0 ? '−' : '') + (Math.abs(k1) === 1 ? v1 : Math.abs(k1) + v1);
-    left += (k2 >= 0 ? ' + ' : ' − ') + (Math.abs(k2) === 1 ? v2 : Math.abs(k2) + v2);
-    return left + ' = ' + c;
-  };
-  return { text: join(a1, 'x', b1, 'y', c1) + '<br>' + join(a2, 'x', b2, 'y', c2), x, y, a1, b1, c1, a2, b2, c2 };
+  return { text: line(a1,b1,c1) + '<br>' + line(a2,b2,c2), x, y };
 }
-function showSist() {
-  sist = genSist();
-  document.getElementById('sist-display').innerHTML = sist.text;
-  document.getElementById('sist-x').value = '';
-  document.getElementById('sist-y').value = '';
-  document.getElementById('sist-feedback').innerHTML = '';
-}
+function showSist() { sist = genSist(); document.getElementById('sist-display').innerHTML = sist.text; document.getElementById('sist-x').value = ''; document.getElementById('sist-y').value = ''; document.getElementById('sist-feedback').innerHTML = ''; }
 document.getElementById('sist-check').addEventListener('click', () => {
-  const x = parseNum(document.getElementById('sist-x').value);
-  const y = parseNum(document.getElementById('sist-y').value);
-  if (isNaN(x) || isNaN(y)) return fb('sist-feedback', 'ko', 'Introdueix els dos valors.');
-  if (eq(x, sist.x) && eq(y, sist.y)) { sistok++; document.getElementById('sist-ok').textContent = sistok; fb('sist-feedback', 'ok', '✓ Correcte! x = ' + sist.x + ', y = ' + sist.y); }
-  else { sistko++; document.getElementById('sist-ko').textContent = sistko; fb('sist-feedback', 'ko', '✗ Incorrecte.'); }
+  const x = parseNum(document.getElementById('sist-x').value), y = parseNum(document.getElementById('sist-y').value);
+  if (isNaN(x) || isNaN(y)) return setFb('sist-feedback', 'ko', 'Introdueix els dos valors.');
+  if (approx(x, sist.x) && approx(y, sist.y)) { sistok++; document.getElementById('sist-ok').textContent = sistok; setFb('sist-feedback', 'ok', '✓ Correcte! x = ' + sist.x + ', y = ' + sist.y); }
+  else { sistko++; document.getElementById('sist-ko').textContent = sistko; setFb('sist-feedback', 'ko', '✗ Incorrecte.'); }
 });
 document.getElementById('sist-new').addEventListener('click', showSist);
-document.getElementById('sist-show').addEventListener('click', () => {
-  fb('sist-feedback', 'info',
-    '<strong>Solució:</strong>' +
-    '<div class="step">x = ' + sist.x + '</div>' +
-    '<div class="step">y = ' + sist.y + '</div>' +
-    '<div class="step">Pots comprovar-ho substituint als dos equacions.</div>');
-});
+document.getElementById('sist-show').addEventListener('click', () => { setFb('sist-feedback', 'info', '<strong>Solució:</strong><div class="step">x = ' + sist.x + '</div><div class="step">y = ' + sist.y + '</div>'); });
 showSist();
 
-/* ========== PROBLEMES D'ENUNCIAT ========== */
+/* ========== PROBLEMES ========== */
 let prob = null, probok = 0, probko = 0;
 const plantilles = [
-  () => {
-    const x = randInt(5, 40);
-    return {
-      text: 'La suma de dos nombres consecutius és ' + (x + x + 1) + '. Quin és el nombre més petit?',
-      sol: x,
-      hint: 'Pista: anomena x al primer i x+1 al segon.',
-      steps: ['Sigui x el primer nombre. L\'altre és x + 1.', 'x + (x + 1) = ' + (2 * x + 1), '2x + 1 = ' + (2 * x + 1) + ' → x = ' + x]
-    };
-  },
-  () => {
-    const edat = randInt(8, 25);
-    const anys = randInt(3, 15);
-    return {
-      text: 'La Maria té ' + edat + ' anys. D\'aquí ' + anys + ' anys, quina edat tindrà?',
-      sol: edat + anys,
-      hint: 'Pista: suma les edats.',
-      steps: ['Edat actual: ' + edat, 'D\'aquí ' + anys + ' anys: ' + edat + ' + ' + anys + ' = ' + (edat + anys)]
-    };
-  },
-  () => {
-    const pares = randInt(35, 55);
-    const fill = randInt(5, 15);
-    const diff = pares - fill;
-    return {
-      text: 'Un pare té ' + pares + ' anys i el seu fill en té ' + fill + '. Quants anys es porten?',
-      sol: diff,
-      hint: 'Pista: resta les edats.',
-      steps: [pares + ' − ' + fill + ' = ' + diff]
-    };
-  },
-  () => {
-    const preu = randInt(3, 20);
-    const quantitat = randInt(2, 10);
-    return {
-      text: 'Un bolígraf costa ' + preu + ' €. Quant costen ' + quantitat + ' bolígrafs?',
-      sol: preu * quantitat,
-      hint: 'Pista: multiplica.',
-      steps: [preu + ' · ' + quantitat + ' = ' + (preu * quantitat) + ' €']
-    };
-  },
-  () => {
-    const triple = randInt(4, 20);
-    const result = 3 * triple + 7;
-    return {
-      text: 'El triple d\'un nombre més 7 és igual a ' + result + '. Quin és el nombre?',
-      sol: triple,
-      hint: 'Pista: planteja 3x + 7 = ' + result,
-      steps: ['3x + 7 = ' + result, '3x = ' + (result - 7), 'x = ' + triple]
-    };
-  },
-  () => {
-    const n = randInt(10, 50);
-    const meitat = 2 * n;
-    return {
-      text: 'La meitat d\'un nombre és ' + n + '. Quin és el nombre?',
-      sol: meitat,
-      hint: 'Pista: x/2 = ' + n,
-      steps: ['x / 2 = ' + n, 'x = ' + meitat]
-    };
-  },
-  () => {
-    const perim = randInt(4, 15) * 4;
-    return {
-      text: 'El perímetre d\'un quadrat és ' + perim + ' cm. Quant fa el costat?',
-      sol: perim / 4,
-      hint: 'Pista: perímetre = 4 · costat.',
-      steps: ['4·costat = ' + perim, 'costat = ' + perim + ' / 4 = ' + (perim / 4) + ' cm']
-    };
-  },
-  () => {
-    const total = randInt(20, 100);
-    const p = [10, 20, 25, 50][randInt(0, 3)];
-    return {
-      text: 'En una classe de ' + total + ' alumnes, el ' + p + '% són noies. Quantes noies hi ha?',
-      sol: total * p / 100,
-      hint: 'Pista: (' + p + '/100) · ' + total,
-      steps: [total + ' · ' + p + ' / 100 = ' + (total * p / 100)]
-    };
-  },
-  () => {
-    const a = randInt(5, 30);
-    const diff = randInt(2, 10);
-    return {
-      text: 'La suma de dos nombres és ' + (a + a + diff) + ' i la seva diferència és ' + diff + '. Quin és el nombre més gran?',
-      sol: a + diff,
-      hint: 'Pista: x + y = suma, x − y = diferència.',
-      steps: ['x + y = ' + (2 * a + diff), 'x − y = ' + diff, 'Sumant: 2x = ' + (2 * a + 2 * diff) + ' → x = ' + (a + diff)]
-    };
-  },
-  () => {
-    const velocitat = randInt(40, 120);
-    const temps = randInt(2, 6);
-    return {
-      text: 'Un cotxe va a ' + velocitat + ' km/h durant ' + temps + ' hores. Quina distància recorre?',
-      sol: velocitat * temps,
-      hint: 'Pista: distància = velocitat · temps.',
-      steps: [velocitat + ' · ' + temps + ' = ' + (velocitat * temps) + ' km']
-    };
-  }
+  () => { const x = randInt(5, 40); return { text: 'La suma de dos nombres consecutius és ' + (2*x+1) + '. Quin és el nombre més petit?', sol: x, hint: 'Pista: x + (x+1) = ' + (2*x+1), steps: ['x + (x+1) = ' + (2*x+1), '2x = ' + (2*x) + ' → x = ' + x] }; },
+  () => { const e = randInt(8, 25), a = randInt(3, 15); return { text: 'La Maria té ' + e + ' anys. D\'aquí ' + a + ' anys, quina edat tindrà?', sol: e+a, hint: 'Pista: suma les edats.', steps: [e + ' + ' + a + ' = ' + (e+a)] }; },
+  () => { const p = randInt(35, 55), f = randInt(5, 15); return { text: 'Un pare té ' + p + ' anys i el seu fill en té ' + f + '. Quants anys es porten?', sol: p-f, hint: 'Pista: resta les edats.', steps: [p + ' − ' + f + ' = ' + (p-f)] }; },
+  () => { const p = randInt(3, 20), q = randInt(2, 10); return { text: 'Un bolígraf costa ' + p + ' €. Quant costen ' + q + ' bolígrafs?', sol: p*q, hint: 'Pista: multiplica.', steps: [p + ' × ' + q + ' = ' + (p*q) + ' €'] }; },
+  () => { const t = randInt(4, 20), r = 3*t+7; return { text: 'El triple d\'un nombre més 7 és igual a ' + r + '. Quin és el nombre?', sol: t, hint: 'Pista: 3x + 7 = ' + r, steps: ['3x + 7 = ' + r, '3x = ' + (r-7), 'x = ' + t] }; },
+  () => { const n = randInt(10, 50); return { text: 'La meitat d\'un nombre és ' + n + '. Quin és el nombre?', sol: 2*n, hint: 'Pista: x/2 = ' + n, steps: ['x / 2 = ' + n, 'x = ' + (2*n)] }; },
+  () => { const p = randInt(4, 15)*4; return { text: 'El perímetre d\'un quadrat és ' + p + ' cm. Quant fa el costat?', sol: p/4, hint: 'Pista: perímetre = 4 × costat.', steps: ['4 × costat = ' + p, 'costat = ' + (p/4) + ' cm'] }; },
+  () => { const t = randInt(20, 100), p = [10,20,25,50][randInt(0,3)]; return { text: 'En una classe de ' + t + ' alumnes, el ' + p + '% són noies. Quantes noies hi ha?', sol: t*p/100, hint: 'Pista: (' + p + '/100) × ' + t, steps: [t + ' × ' + p + '/100 = ' + (t*p/100)] }; },
+  () => { const a = randInt(5, 30), d = randInt(2, 10); return { text: 'La suma de dos nombres és ' + (2*a+d) + ' i la seva diferència és ' + d + '. Quin és el més gran?', sol: a+d, hint: 'Pista: x + y = suma, x − y = diferència.', steps: ['x + y = ' + (2*a+d), 'x − y = ' + d, 'Sumant: 2x = ' + (2*a+2*d) + ' → x = ' + (a+d)] }; },
+  () => { const v = randInt(40, 120), t = randInt(2, 6); return { text: 'Un cotxe va a ' + v + ' km/h durant ' + t + ' hores. Quina distància recorre?', sol: v*t, hint: 'Pista: distància = velocitat × temps.', steps: [v + ' × ' + t + ' = ' + (v*t) + ' km'] }; }
 ];
-function showProb() {
-  prob = plantilles[randInt(0, plantilles.length - 1)]();
-  document.getElementById('prob-display').textContent = prob.text;
-  document.getElementById('prob-hint').textContent = prob.hint;
-  document.getElementById('prob-answer').value = '';
-  document.getElementById('prob-feedback').innerHTML = '';
-}
+function showProb() { prob = plantilles[randInt(0, plantilles.length-1)](); document.getElementById('prob-display').textContent = prob.text; document.getElementById('prob-hint').textContent = prob.hint; document.getElementById('prob-answer').value = ''; document.getElementById('prob-feedback').innerHTML = ''; }
 document.getElementById('prob-check').addEventListener('click', () => {
   const r = parseNum(document.getElementById('prob-answer').value);
-  if (isNaN(r)) return fb('prob-feedback', 'ko', 'Escriu un nombre vàlid.');
-  if (eq(r, prob.sol)) { probok++; document.getElementById('prob-ok').textContent = probok; fb('prob-feedback', 'ok', '✓ Correcte! La resposta és ' + prob.sol); }
-  else { probko++; document.getElementById('prob-ko').textContent = probko; fb('prob-feedback', 'ko', '✗ Incorrecte. Revisa el plantejament.'); }
+  if (isNaN(r)) return setFb('prob-feedback', 'ko', 'Escriu un nombre vàlid.');
+  if (approx(r, prob.sol)) { probok++; document.getElementById('prob-ok').textContent = probok; setFb('prob-feedback', 'ok', '✓ Correcte! Resposta: ' + prob.sol); }
+  else { probko++; document.getElementById('prob-ko').textContent = probko; setFb('prob-feedback', 'ko', '✗ Incorrecte. Revisa el plantejament.'); }
 });
 document.getElementById('prob-new').addEventListener('click', showProb);
-document.getElementById('prob-show').addEventListener('click', () => {
-  fb('prob-feedback', 'info',
-    '<strong>Solució pas a pas:</strong>' +
-    prob.steps.map(s => '<div class="step">' + s + '</div>').join('') +
-    '<div class="step"><strong>Resposta: ' + prob.sol + '</strong></div>');
-});
+document.getElementById('prob-show').addEventListener('click', () => { setFb('prob-feedback', 'info', '<strong>Solució:</strong>' + prob.steps.map(s => '<div class="step">' + s + '</div>').join('') + '<div class="step"><strong>Resposta: ' + prob.sol + '</strong></div>'); });
 document.getElementById('prob-answer').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('prob-check').click(); });
 showProb();
 </script>
